@@ -1,14 +1,16 @@
 import cv2
 import numpy as np
 import sys
+import os
 from sklearn.linear_model import LinearRegression
 from src.logger import logging
 from src.exception import CustomException
+from src.config.configuration import horizontal_settings as hs
+from src.config.configuration import general_settings as gs
 
 class DetectHorizon:
-    def __init__(self, imgs, output_path):
-        self.imgs = imgs
-        self.output_path = output_path
+    def __init__(self, img):
+        self.img = img
         logging.info('Initialize horizon detection module ...')
     
     def filter_points(self, points):
@@ -40,33 +42,31 @@ class DetectHorizon:
         cv2.line(img, start_point, end_point, color, thickness)
         return start_point, end_point 
 
-    def horizon_detection(self) -> list:
+    def horizon_detection(self):
         try:
-            list_points = []
-            for img in self.imgs:
-                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-                edges = cv2.Canny(blurred, 50, 150)
-                
-                lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=10)
-                
-                points = []
-                if lines is not None:
-                    for line in lines:
-                        x1, y1, x2, y2 = line[0]
-                        if abs(y2 - y1) < 10: 
-                            y = (y1 + y2) // 2
-                            for x in range(min(x1, x2), max(x1, x2), 10): 
-                                points.append((x, y)) 
-                
-                _, image_width = img.shape[:2]
-                filtered_points = self.filter_points(points)
-                start_point, end_point = self.linear_regression_line(filtered_points, image_width, img)
-                list_points.append([start_point, end_point])
-                
-                cv2.imwrite(self.output_path, img)
+            gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+            blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+            edges = cv2.Canny(blurred, 50, 150)
             
-            return list_points
+            lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=10)
+            
+            points = []
+            if lines is not None:
+                for line in lines:
+                    x1, y1, x2, y2 = line[0]
+                    if abs(y2 - y1) < 10: 
+                        y = (y1 + y2) // 2
+                        for x in range(min(x1, x2), max(x1, x2), 10): 
+                            points.append((x, y)) 
+            
+            _, image_width = self.img.shape[:2]
+            filtered_points = self.filter_points(points)
+            start_point, end_point = self.linear_regression_line(filtered_points, image_width, self.img)
+
+            img_output_path = os.path.join(gs.output_path, hs.file_name)
+            cv2.imwrite(img_output_path, self.img)
+            
+            return start_point, end_point
         
         except Exception as e:
             raise CustomException(e,sys)
