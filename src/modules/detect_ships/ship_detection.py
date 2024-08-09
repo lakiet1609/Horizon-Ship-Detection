@@ -5,8 +5,8 @@ import sys
 import torch
 import torchvision
 from torch.utils.data import DataLoader
-from dataset import Custom_Dataset
-from model import RCF
+from src.modules.detect_ships.dataset import Custom_Dataset
+from src.modules.detect_ships.model import RCF
 from src.logger import logging
 from src.exception import CustomException
 from src.utils import *
@@ -15,7 +15,8 @@ from src.config.configuration import general_settings as gs
 
 
 class ShipDetection:
-    def __init__(self):
+    def __init__(self, img):
+        self.img = img
         logging.info('Initialize edge detection module ...')
 
 
@@ -98,6 +99,7 @@ class ShipDetection:
             cv2.imwrite(os.path.join(gs.output_path, output_name), image)
             logging.info(f"Image saved to {output_path}")
 
+            return output_path
         except Exception as e:
             raise CustomException(e,sys)
  

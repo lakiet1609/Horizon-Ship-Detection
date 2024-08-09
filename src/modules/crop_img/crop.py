@@ -8,9 +8,8 @@ from src.config.configuration import crop_settings as cs
 
 
 class CropImage:
-    def __init__(self, img, output_path):
+    def __init__(self, img):
         self.img = img
-        self.output_path = output_path
         logging.info('Initialize crop image module ...')
     
     def crop_blank_pixels(self):
@@ -25,7 +24,7 @@ class CropImage:
                 cropped_image = self.img[y:y+h, x:x+w]
                 img_output_path = os.path.join(gs.output_path, cs.file_name)
                 cv2.imwrite(img_output_path, cropped_image)
-                print(f"Cropped image saved to {self.output_path}")
+                print(f"Cropped image saved to {img_output_path}")
 
             return cropped_image
         

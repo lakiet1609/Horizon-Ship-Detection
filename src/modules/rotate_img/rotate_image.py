@@ -17,7 +17,6 @@ class RotateImage:
     
     def rotate_image_to_level(self):
         try:
-
             dx = self.end_point[0] - self.start_point[0]
             dy = self.end_point[1] - self.start_point[1]
             angle = np.arctan2(dy, dx) * (180 / np.pi)
