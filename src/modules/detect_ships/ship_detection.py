@@ -27,7 +27,6 @@ class ShipDetection:
 
     def single_scale_test(self, model, test_loader, save_dir):
         model.eval()
-        img_names = []
         for idx, image in enumerate(test_loader):
             image = image.cuda()
             _, _, H, W = image.shape
@@ -36,8 +35,6 @@ class ShipDetection:
             for i in range(len(results)):
                 all_res[i, 0, :, :] = results[i]
             filename = f'three_ships_horizon_{idx}'
-            img_names.append(filename)
-            torchvision.utils.save_image(1 - all_res, os.path.join(save_dir, '%s.jpg' % filename))
             fuse_res = torch.squeeze(results[-1].detach()).cpu().numpy()
             fuse_res = ((1 - fuse_res) * 255).astype(np.uint8)
             cv2.imwrite(os.path.join(save_dir, '%s_ss.png' % filename), fuse_res)
