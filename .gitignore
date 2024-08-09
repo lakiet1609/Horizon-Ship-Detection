@@ -167,4 +167,3 @@ models
 src/logs
 .env
 logs
-results

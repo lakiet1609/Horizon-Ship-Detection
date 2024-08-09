@@ -18,14 +18,14 @@ def dilate_img(img, kernel_size, iterations):
     return mask_image
 
 
-def draw_white_line(image, start_point, end_point, thickness=5):
+def draw_white_line(image, start_point, end_point, thickness):
     color = (255, 255, 255)
     cv2.line(image, start_point, end_point, color, thickness)
     return image
 
 
-def check_area_of_mask(mask_image, min_width=32, min_height=32, expansion_size=15):
-    num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(mask_image, connectivity=8)
+def check_area_of_mask(mask_image, min_width, min_height, expansion_size):
+    num_labels, _, stats, _ = cv2.connectedComponentsWithStats(mask_image, connectivity=8)
     bounding_boxes = []
     for label in range(1, num_labels):
         x, y, w, h, _ = stats[label]

@@ -20,16 +20,16 @@ class ShipDetectionSettings(BaseSettings):
     checkpoint: str = 'models/bsds500_pascal_model.pth'
     file_name: str = 'output_image.tiff'
     mask_file_name: str = 'mask_bbox.png'
-    start_point: tuple = (0, 205)
-    end_point: tuple = (1600, 203)
-    thickness: int = 5
+    start_point: tuple = (0, 208)
+    end_point: tuple = (1600, 209)
+    thickness: int = 15
     erode_kernel: tuple = (3,3)
     erode_iterations: int = 1
-    dilate_kernel: tuple = (3,3)
-    dilate_iterations: int = 6
-    min_width: int = 32 
-    min_height: int = 32 
-    expansion_size:int = 50
+    dilate_kernel: tuple = (4,4)
+    dilate_iterations: int = 5
+    min_width: int = 25
+    min_height: int = 25 
+    expansion_size:int = 85
 
 general_settings = GeneralSettings()
 horizontal_settings = HorizontalDetectionSettings()

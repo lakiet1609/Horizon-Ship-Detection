@@ -12,6 +12,7 @@ from src.logger import logging
 from src.exception import CustomException
 from src.utils import *
 from src.config.configuration import ship_detection_settings as sds
+from src.config.configuration import rotate_settings as rs
 from src.config.configuration import general_settings as gs
 
 
@@ -67,7 +68,7 @@ class ShipDetection:
         for img in os.listdir(self.output_folder):
             img_path = os.path.join(self.output_folder, img)
             img_data = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-            erase_horizon_img = draw_white_line(img_data, sds.start_point, sds.end_point)
+            erase_horizon_img = draw_white_line(img_data, sds.start_point, sds.end_point, thickness=sds.thickness)
             erode_image = erode_img(erase_horizon_img, sds.erode_kernel, sds.erode_iterations)
             dilate_image = dilate_img(erode_image, sds.dilate_kernel, sds.dilate_iterations) 
             mask_image, bboxes = check_area_of_mask(dilate_image, sds.min_width, sds.min_height, sds.expansion_size)
@@ -78,7 +79,8 @@ class ShipDetection:
     
     def save_and_draw_bb_img(self):
         try:
-            image = cv2.imread(gs.input_path)
+            img_path = os.path.join(rs.output_folder, rs.file_name)
+            image = cv2.imread(img_path)
             if image is None:
                 raise ValueError("Image not found or unable to load image.")
             
@@ -94,8 +96,8 @@ class ShipDetection:
             
             copy_img = deepcopy(image)
             
-            output_name = 'output_image.tiff'
-            output_name_png = 'output_image.png'
+            output_name = 'three_ships_boxed.tiff'
+            output_name_png = 'three_ships_boxed.png'
             
             output_path = os.path.join(gs.output_path, output_name)
             output_path_png = os.path.join(gs.output_path, output_name_png)
