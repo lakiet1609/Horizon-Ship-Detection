@@ -163,5 +163,8 @@ cython_debug/
 
 test
 research
-model
+models
 src/logs
+.env
+logs
+results

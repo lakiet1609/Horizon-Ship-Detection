@@ -8,14 +8,15 @@ class HorizontalDetectionSettings(BaseSettings):
     file_name: str = 'horizontal_detection.png'
 
 class RotateSettings(BaseSettings):
+    output_folder: str = 'results/rotate'
     file_name: str = 'rotate.png'
 
 class CropSettings(BaseSettings):
     file_name: str = 'crop.png'
 
 class ShipDetectionSettings(BaseSettings):
-    gpu: int = 0
-    edge_output_path: str = 'results/edge_detection'
+    gpu: str = '0'
+    edge_output_path: str = 'edge_detection'
     checkpoint: str = 'models/bsds500_pascal_model.pth'
     file_name: str = 'output_image.tiff'
     mask_file_name: str = 'mask_bbox.png'

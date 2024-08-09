@@ -1,6 +1,8 @@
 import cv2
 import os
 import sys
+sys.path.insert(0, '../techical_test')
+
 import numpy as np
 from src.logger import logging
 from src.exception import CustomException
@@ -13,6 +15,10 @@ class RotateImage:
         self.img = img
         self.start_point = start_point
         self.end_point = end_point
+        if not os.path.exists(rs.output_folder):
+            os.makedirs(rs.output_folder, exist_ok=True)
+            logging.info('Create output folder for rotate module')
+            
         logging.info('Initialize rotate image module ...')
     
     def rotate_image_to_level(self):
@@ -25,7 +31,7 @@ class RotateImage:
             M = cv2.getRotationMatrix2D(center, angle, 1.0)
             rotated_image = cv2.warpAffine(self.img, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
             
-            img_output_path = os.path.join(gs.output_path, rs.file_name)
+            img_output_path = os.path.join(rs.output_folder, rs.file_name)
             cv2.imwrite(img_output_path, rotated_image)
             
             logging.info(f"Rotated image saved to: {img_output_path}")

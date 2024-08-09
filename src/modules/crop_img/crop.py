@@ -24,7 +24,7 @@ class CropImage:
                 cropped_image = self.img[y:y+h, x:x+w]
                 img_output_path = os.path.join(gs.output_path, cs.file_name)
                 cv2.imwrite(img_output_path, cropped_image)
-                print(f"Cropped image saved to {img_output_path}")
+                logging.info(f"Cropped image saved to {img_output_path}")
 
             return cropped_image
         

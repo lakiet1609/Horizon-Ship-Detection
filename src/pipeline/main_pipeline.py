@@ -1,3 +1,4 @@
+from copy import deepcopy
 from src.modules.load_img.read_img import ReadImage
 from src.modules.detect_horizon.horizon import DetectHorizon
 from src.modules.rotate_img.rotate_image import RotateImage
@@ -11,6 +12,7 @@ img_path = gs.input_path
 ##STAGE 1: READ THE IMAGE
 logging.info('INITIALIZE STAGE 1')
 image_data = ReadImage().read_image(img_path)
+orginal_data = deepcopy(image_data)
 logging.info('FINISHED STAGE 1')
 
 
@@ -22,7 +24,7 @@ logging.info('FINISHED STAGE 2')
 
 ##STAGE 3: ROTATE IMAGE TO ADJUST
 logging.info('INITIALIZE STAGE 3')
-rotated_image = RotateImage(image_data, start_point, end_point).rotate_image_to_level()
+rotated_image = RotateImage(orginal_data, start_point, end_point).rotate_image_to_level()
 logging.info('FINISHED STAGE 3')
 
 
